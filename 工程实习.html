@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+    <script src="echarts.min.js"></script>
     <title>工程测量曲线计算实习</title>
 </head>
 
@@ -59,9 +60,10 @@
             </tbody>
         </table>
 
-        <button id="xiugai" onclick="openModal()">修改</button>
+        <button id="xiugai" onclick="openModal()" class="xiugai">修改</button>
         <button onclick="calculation()">计算</button>
-        <button id="chazhao" onclick="openModal2()">查找</button>
+        <button id="chazhao" onclick="openModal2()" class="chazhao">查找</button>
+        <button onclick="openModal3()" class="huitu">绘图</button>
     </div>
     <div class=" middle-column-three">
         <table border="1" cellspacing="0">
@@ -242,6 +244,15 @@
                     <td id="sf_y"></td>
                 </tr>
             </table>
+        </div>
+    </div>
+
+    <div id="modal3" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal3()">&times;</span>
+            <h2>绘图</h2>
+            <div id="chart" style="width: 600px;height: 600px;" class="paint_style"></div>
+            <!-- <div id="main1" style="width: 600px;height:400px;" class="paint_style"></div> -->
         </div>
     </div>
 </body>

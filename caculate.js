@@ -8,6 +8,11 @@ ZH = 273 + 15 / 60 + 23.4 / 3600;
 HZ = ZH + alpha - 180;
 xishu = 1;
 let find_miles, f_x, f_y;
+if_cal = false;
+let point_data = [];
+let point_data1 = [];
+let point_data2 = [];
+let point_data3 = [];
 
 function calculation() {
     clear();
@@ -54,11 +59,14 @@ function calculation() {
 
     //计算坐标
     len = parseInt((HZ_m - ZH_m) / 10);
+    len1 = parseInt((HY_m - ZH_m) / 10);
+    len2 = parseInt((YH_m - ZH_m) / 10);
+    len3 = parseInt((HZ_m - ZH_m) / 10);
 
     let name = Array(len);
-    let point_miles = Array(len);
-    let point_X = Array(len);
-    let point_Y = Array(len);
+    point_miles = Array(len);
+    point_X = Array(len);
+    point_Y = Array(len);
 
     //求解局部独立坐标
     for (var i = 0; i < len; i++) {
@@ -126,7 +134,23 @@ function calculation() {
         cellX.innerHTML = point_X[i].toFixed(3);
         cellY.innerHTML = point_Y[i].toFixed(3);
     }
-    alert("计算完成！");
+
+    if_cal = true;
+
+    for (var i = 0; i < len; i++) {
+        var x = point_X[i].toFixed(3);
+        var y = point_Y[i].toFixed(3);
+        point_data.push([x, y]);
+        if (i < len1) {
+            point_data1.push([x, y]);
+        }
+        else if (i >= len1 && i < len2) {
+            point_data2.push([x, y]);
+        }
+        else if (i >= len2 && i < len3) {
+            point_data3.push([x, y]);
+        }
+    }
 
 }
 
@@ -251,6 +275,21 @@ function closeModal2() {
     document.getElementById('modal2').style.display = 'none';
 }
 
+function openModal3() {
+    if (if_cal === true) {
+        document.getElementById('modal3').style.display = 'block';
+        calculation();
+        paint_e();
+        // test_paint();
+    }
+    else { alert("请先计算！"); }
+
+}
+
+function closeModal3() {
+    document.getElementById('modal3').style.display = 'none';
+}
+
 function find() {
     find_miles = document.getElementById("find_miles").value;
     find_miles = Number(find_miles);
@@ -302,3 +341,133 @@ function findsss() {
     document.getElementById("sf_x").innerText = f_x.toFixed(3);
     document.getElementById("sf_y").innerText = f_y.toFixed(3);
 }
+
+
+function returnh() {
+    window.location.href = "工程实习.html";
+}
+
+function paint() {
+
+
+}
+
+// test_paint();
+// function test_paint(params) {
+//     var myChart = echarts.init(document.getElementById('main1'));
+
+//     // 指定图表的配置项和数据
+//     var option1 = {
+//         legend: {},
+//         tooltip: {},
+//         dataset: {
+//             // 提供一份数据。
+//             source: [
+//                 ['product', '2015', '2016', '2017'],
+//                 ['Matcha Latte', 43.3, 85.8, 93.7],
+//                 ['Milk Tea', 83.1, 73.4, 55.1],
+//                 ['Cheese Cocoa', 86.4, 65.2, 82.5],
+//                 ['Walnut Brownie', 72.4, 53.9, 39.1]
+//             ]
+//         },
+//         // 声明一个 X 轴，类目轴（category）。默认情况下，类目轴对应到 dataset 第一列。
+//         xAxis: { type: 'category' },
+//         // 声明一个 Y 轴，数值轴。
+//         yAxis: {},
+//         // 声明多个 bar 系列，默认情况下，每个系列会自动对应到 dataset 的每一列。
+//         series: [
+//             { type: 'bar' },
+//             { type: 'bar' },
+//             { type: 'bar' }
+//         ]
+//     };
+//     myChart.setOption(option1);
+
+// }
+
+
+
+function paint_e() {
+
+    var chart = echarts.init(document.getElementById('chart'));
+
+    var option = {
+        title: {
+            text: '点分布图'
+        },
+        toolbox: {
+            show: true,
+            feature: {
+
+                restore: {//还原原始图表
+                    show: true
+                },
+                saveAsImage: {
+                    show: true,
+                    type: 'png',
+                    name: '下载',
+                    title: '保存为图片',
+                },
+            },
+        },
+        tooltip: {
+            trigger: 'item',
+            position: 'top'
+        },
+        legend: {
+            orient: 'horizontal',
+            x: 'center',
+            y: 'top',
+            itemGap: 40
+        },
+        xAxis: {
+            type: 'value',
+            scale: true,
+            name: 'X轴',
+        },
+        yAxis: {
+            type: 'value',
+            scale: true,
+            name: 'Y轴',
+        },
+        dataZoom: [{
+            type: 'inside', // 放大和缩小
+            orient: 'vertical',
+        }, {
+            type: 'inside',
+        }],
+        series: [
+            {
+                name: 'ZH-HY',
+                type: 'scatter',
+                data: point_data1,
+                itemStyle: {
+                    color: 'red'
+                },
+
+            },
+            {
+                name: 'HY-YH',
+                type: 'scatter',
+                data: point_data2,
+                itemStyle: {
+                    color: 'purple'
+                }
+            },
+            {
+                name: 'YH-HZ',
+                type: 'scatter',
+                data: point_data3,
+                itemStyle: {
+                    color: 'green'
+                },
+
+            },
+
+        ]
+    };
+
+    chart.setOption(option);
+}
+
+// paint_e();
